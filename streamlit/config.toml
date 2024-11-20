@@ -1,0 +1,6 @@
+[build]
+prebuild = """
+python -m pip install --upgrade pip
+python -m pip install setuptools wheel cython
+python setup.py build_ext --inplace
+"""
