@@ -7,8 +7,8 @@ from setuptools.extension import Extension
 extensions = Extension('clara.pylpsolve',
                        ['clara/pylpsolve.pyx'],
                        libraries=['lpsolve55'],
-                       library_dirs=[r'./lp_solve'],
-                       include_dirs=[r'./lp_solve'],
+                       library_dirs=[r'./lpsolve'],
+                       include_dirs=[r'./lpsolve'],
                        define_macros=[
                            ('WIN32', None),
                            ('NOMINMAX', None),
