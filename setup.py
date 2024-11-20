@@ -3,12 +3,18 @@
 from Cython.Build import cythonize
 from setuptools import setup
 from setuptools.extension import Extension
+import os
+import numpy
+
+lpsolve_path = os.path.join(os.path.dirname(__file__), 'lpsolve')
 
 extensions = Extension('clara.pylpsolve',
                        ['clara/pylpsolve.pyx'],
                        libraries=['lpsolve55'],
-                       library_dirs=[r'./lpsolve'],
-                       include_dirs=[r'./lpsolve'],
+                       library_dirs=[lpsolve_path],
+                       include_dirs=[
+                           lpsolve_path,
+                           numpy.get_include()],
                        define_macros=[
                            ('WIN32', None),
                            ('NOMINMAX', None),
@@ -29,7 +35,7 @@ setup(name='clara',
       url='https://github.com/iradicek/clara',
       packages=['clara'],
       ext_modules = cythonize(extensions),
-      install_requires=['pycparser', 'zss'],
+      install_requires=['numpy', 'pycparser', 'zss'],
       scripts=['bin/clara'],
       entry_points={
           'console_scripts': [
