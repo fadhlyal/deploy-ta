@@ -3,12 +3,49 @@
 /* BEGIN: Cython Metadata
 {
     "distutils": {
+        "define_macros": [
+            [
+                "WIN32",
+                null
+            ],
+            [
+                "NOMINMAX",
+                null
+            ],
+            [
+                "_USRDLL",
+                null
+            ],
+            [
+                "_MBCS",
+                null
+            ],
+            [
+                "_CRT_SECURE_NO_WARNINGS",
+                null
+            ],
+            [
+                "YY_NO_UNISTD_H",
+                null
+            ],
+            [
+                "_WINDLL",
+                null
+            ],
+            [
+                "_hypot",
+                "hypot"
+            ]
+        ],
         "depends": [],
+        "include_dirs": [
+            "D:\\TUGAS AKHIR\\PAD\\clara-master\\lp_solve"
+        ],
         "libraries": [
             "lpsolve55"
         ],
         "library_dirs": [
-            "/usr/lib/lp_solve"
+            "D:\\TUGAS AKHIR\\PAD\\clara-master\\lp_solve"
         ],
         "name": "clara.pylpsolve",
         "sources": [
@@ -1519,11 +1556,11 @@ static const char *__pyx_filename;
 static const char *__pyx_f[] = {
   "clara\\\\pylpsolve.pyx",
   "<stringsource>",
-  "clara-env\\\\Lib\\\\site-packages\\\\Cython\\\\Includes\\\\cpython\\\\contextvars.pxd",
-  "clara-env\\\\Lib\\\\site-packages\\\\Cython\\\\Includes\\\\cpython\\\\array.pxd",
-  "clara-env\\\\Lib\\\\site-packages\\\\Cython\\\\Includes\\\\cpython\\\\type.pxd",
-  "clara-env\\\\Lib\\\\site-packages\\\\Cython\\\\Includes\\\\cpython\\\\bool.pxd",
-  "clara-env\\\\Lib\\\\site-packages\\\\Cython\\\\Includes\\\\cpython\\\\complex.pxd",
+  "contextvars.pxd",
+  "array.pxd",
+  "type.pxd",
+  "bool.pxd",
+  "complex.pxd",
 };
 /* #### Code section: utility_code_proto_before_types ### */
 /* ForceInitThreads.proto */
