@@ -1,7 +1,4 @@
-# This workflow will install Python dependencies, run tests and lint with a variety of Python versions
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
-
-name: Build and test
+name: Build and Test Clara Package
 
 on:
   push:
@@ -11,36 +8,77 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9]
-
+        python-version: [3.8, 3.9, '3.10']  # Updated to more recent Python versions
+    
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive  # In case you have submodules
+    
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v1
+      uses: actions/setup-python@v3
       with:
         python-version: ${{ matrix.python-version }}
-    - name: Install dependencies
+    
+    - name: Install system dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          build-essential \
+          gcc \
+          lp-solve \
+          liblpsolve55-dev \
+          libc6-dev \
+          libffi-dev \
+          libssl-dev
+    
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
+        pip install numpy cython setuptools wheel
         pip install -r requirements.txt
-        sudo apt-get update
-        sudo apt-get install lp-solve liblpsolve55-dev
+    
+    - name: Copy local lpsolve libraries (if any)
+      run: |
+        # If you have local lpsolve files, copy them
+        if [ -d "lpsolve" ]; then
+          sudo cp lpsolve/*.so /usr/local/lib/ || true
+          sudo ldconfig
+        fi
+    
     - name: Lint with flake8
       run: |
         pip install flake8
-        # stop the build if there are Python syntax errors or undefined names
+        # Stop the build if there are Python syntax errors or undefined names
         flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
+        # Exit-zero treats all errors as warnings
         flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+    
     - name: Install package
       run: |
+        # Set library path to include lpsolve
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/lp_solve/
+        
+        # Install the package
         python setup.py install
-    - name: Test with pytest
+    
+    - name: Run tests
       run: |
         pip install pytest
-        export LD_LIBRARY_PATH=/usr/lib/lp_solve/
+        
+        # Ensure lpsolve libraries are in the library path
+        export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/lp_solve/
+        
+        # Run pytest
         pytest tests/
+    
+    - name: Additional package verification
+      run: |
+        # List installed packages
+        pip list
+        
+        # Try importing the package
+        python -c "import clara; print('Clara imported successfully')"
