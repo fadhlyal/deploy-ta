@@ -6,26 +6,33 @@ from setuptools.extension import Extension
 import os
 import numpy
 
-lpsolve_path = os.path.join(os.path.dirname(__file__), 'lpsolve')
+# Get the absolute path to the current directory (project root)
+project_root = os.path.abspath(os.path.dirname(__file__))
 
-extensions = Extension('clara.pylpsolve',
-                       ['clara/pylpsolve.pyx'],
-                       libraries=['lpsolve55'],
-                       library_dirs=[lpsolve_path],
-                       include_dirs=[
-                           lpsolve_path,
-                           numpy.get_include()],
-                       define_macros=[
-                           ('WIN32', None),
-                           ('NOMINMAX', None),
-                           ('_USRDLL', None),
-                           ('_MBCS', None),
-                           ('_CRT_SECURE_NO_WARNINGS', None),
-                           ('YY_NO_UNISTD_H', None),
-                           ('_WINDLL', None),
-                           ('_hypot', 'hypot'),  # This prevents the macro redefinition
-                           ]
-                        )
+extensions = Extension(
+    'clara.pylpsolve',
+    ['clara/pylpsolve.pyx'],
+    libraries=['lpsolve55'],
+    library_dirs=[
+        project_root,  # Add project root to library search path
+        os.path.join(project_root, 'lpsolve')
+    ],
+    include_dirs=[
+        project_root,  # Project root
+        os.path.join(project_root, 'lpsolve'),  # Specific lpsolve folder
+        numpy.get_include()
+    ],
+    define_macros=[
+        ('WIN32', None),
+        ('NOMINMAX', None),
+        ('_USRDLL', None),
+        ('_MBCS', None),
+        ('_CRT_SECURE_NO_WARNINGS', None),
+        ('YY_NO_UNISTD_H', None),
+        ('_WINDLL', None),
+        ('_hypot', 'hypot'),
+    ]
+)
 
 setup(name='clara',
       version='1.0',
